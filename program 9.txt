@@ -1,0 +1,46 @@
+# ---------- Step 0: Start Minikube ----------
+minikube start
+
+# ---------- Step 1: Create project directory ----------
+mkdir Program-9
+cd Program-9
+
+# ---------- Step 2: Create pod.yaml ----------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  namespace: dev
+  labels:
+    app: web
+    env: development
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    ports:
+    - containerPort: 80
+
+# ---------- Step 4: Apply YAML files ----------
+
+kubectl apply -f pod.yaml
+
+# ---------- Step 5: Verify namespaces ----------
+kubectl get namespaces
+
+# ---------- Step 6: Verify pods by namespace ----------
+kubectl get pods -n dev
+kubectl get pods -n prod
+
+# ---------- Step 7: Filter pods by labels ----------
+kubectl get pods -n dev -l app=frontend
+kubectl get pods -n prod -l app=backend
+
+# ---------- Step 8: Check overall pod status ----------
+kubectl get pods --all-namespaces
+
+# ---------- Step 9: Cleanup ----------
+kubectl delete pods --all -n dev
+kubectl delete pods --all -n prod
+kubectl delete namespaces dev prod
+

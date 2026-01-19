@@ -1,0 +1,52 @@
+
+
+echo "Starting Minikube..."
+minikube start --cpus=2 --memory=4096
+
+echo "Launching Kubernetes Dashboard..."
+minikube dashboard &
+
+
+
+deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo
+spec:
+  selector:
+    matchLabels:
+      app: demo
+  template:
+    metadata:
+      labels:
+        app: demo
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+
+
+service.yaml 
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo
+spec:
+  selector:
+    app: demo
+  ports:
+  - port: 80
+EOF
+
+echo "Applying Kubernetes configuration..."
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+
+echo "Monitoring cluster using CLI..."
+kubectl get nodes
+kubectl get pods
+kubectl get services
+kubectl describe deployment demo
+kubectl top pods
+

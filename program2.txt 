@@ -1,0 +1,47 @@
+
+mkdir custom-docker-app
+cd custom-docker-app
+
+
+ Dockerfile 
+FROM python:3.9-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY app.py .
+
+EXPOSE 5000
+
+CMD ["python", "app.py"]
+
+
+
+
+
+ app.py 
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def hello():
+    return "Docker Container Built from Custom Dockerfile!"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+EOF
+
+
+cat > requirements.txt << 'EOF'
+flask
+
+
+
+docker build -t custom-docker-image .
+
+docker run -d -p 5000:5000 --name custom-container custom-docker-image
+
+
+

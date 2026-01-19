@@ -1,0 +1,9 @@
+
+echo "Pulling Jenkins LTS image..."
+sudo docker pull jenkins/jenkins:lts
+
+echo "Starting Jenkins container..." && sudo docker run -d --name jenkins -p 8088:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home jenkins/jenkins:lts
+
+
+"Jenkins Initial Admin Password:"
+sudo docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
